@@ -1,4 +1,4 @@
-/*package ImageHoster.controller;
+package ImageHoster.controller;
 
 import ImageHoster.service.ImageService;
 import org.junit.Test;
@@ -35,4 +35,3 @@ public class HomeControllerTest {
                 .andExpect(content().string(containsString("Image Hoster")));
     }
 }
-*/
