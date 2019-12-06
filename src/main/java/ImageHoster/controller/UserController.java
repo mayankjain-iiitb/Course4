@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-
 @Controller
 public class UserController {
 
@@ -44,14 +43,15 @@ public class UserController {
 		if(!this.checkString(user.getPassword()))
 		{
 			String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+
             User user1 = new User();
             UserProfile profile1 = new UserProfile();
             user1.setProfile(profile1);
+
             model.addAttribute("User", user1);
             model.addAttribute("passwordTypeError", error);
 			return "users/registration";
-		}
-		
+		}		
 		userService.registerUser(user);
         return "redirect:/users/login";
     }
@@ -110,9 +110,7 @@ public class UserController {
         } else if (specialChars.contains(String.valueOf(currentCharacter))) {
             specialCharacterPresent = true;
         }
-    }
- 
-    return
-      numberPresent && (upperCasePresent || lowerCasePresent) && specialCharacterPresent;
+    } 
+    return numberPresent && (upperCasePresent || lowerCasePresent) && specialCharacterPresent;
 	}
 }

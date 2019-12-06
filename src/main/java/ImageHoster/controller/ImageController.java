@@ -37,14 +37,7 @@ public class ImageController {
 
     //This method is called when the details of the specific image with corresponding title are to be displayed
     //The logic is to get the image from the databse with corresponding title. After getting the image from the database the details are shown
-    //First receive the dynamic parameter in the incoming request URL in a string variable 'title' and also the Model type object
-    //Call the getImageByTitle() method in the business logic to fetch all the details of that image
-    //Add the image in the Model type object with 'image' as the key
-    //Return 'images/image.html' file
 
-    //Also now you need to add the tags of an image in the Model type object
-    //Here a list of tags is added in the Model type object
-    //this list is then sent to 'images/image.html' file and the tags are displayed
     @RequestMapping("/images/{id}/{title}")
     public String showImage(@PathVariable("id") String id, @PathVariable("title") String title, Model model) {
         Image image = imageService.getImageByTitle(Integer.parseInt(id), title);
@@ -64,14 +57,7 @@ public class ImageController {
 
     //This controller method is called when the request pattern is of type 'images/upload' and also the incoming request is of POST type
     //The method receives all the details of the image to be stored in the database, and now the image will be sent to the business logic to be persisted in the database
-    //After you get the imageFile, set the user of the image by getting the logged in user from the Http Session
-    //Convert the image to Base64 format and store it as a string in the 'imageFile' attribute
-    //Set the date on which the image is posted
-    //After storing the image, this method directs to the logged in user homepage displaying all the images
 
-    //Get the 'tags' request parameter using @RequestParam annotation which is just a string of all the tags
-    //Store all the tags in the database and make a list of all the tags using the findOrCreateTags() method
-    //set the tags attribute of the image as a list of all the tags returned by the findOrCreateTags() method
     @RequestMapping(value = "/images/upload", method = RequestMethod.POST)
     public String createImage(@RequestParam("file") MultipartFile file, @RequestParam("tags") String tags, Image newImage, HttpSession session) throws IOException {
         User user = (User) session.getAttribute("loggeduser");
@@ -155,7 +141,7 @@ public class ImageController {
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
-        User user= (User) session.getAttribute("loggeduser");
+        User user = (User) session.getAttribute("loggeduser");
         User imageUser = image.getUser();
 
         if (imageUser.getId() == user.getId()) {
@@ -163,10 +149,10 @@ public class ImageController {
             return "redirect:/images";
         }else{
             String error = "Only the owner of the image can delete the image";
-            model.addAttribute("image", image);
+            
+			model.addAttribute("image", image);
             model.addAttribute("tags",image.getTags());
             model.addAttribute("deleteError",error);
-            //adding comments to model attribute
             model.addAttribute("comments",image.getComments());
             return "images/image";
         }
