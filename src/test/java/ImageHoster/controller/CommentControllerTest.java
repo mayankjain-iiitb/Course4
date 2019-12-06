@@ -1,5 +1,4 @@
-/*
-package ImageHoster.controller;
+/*package ImageHoster.controller;
 
 
 import ImageHoster.model.Image;

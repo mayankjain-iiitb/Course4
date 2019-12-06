@@ -1,5 +1,6 @@
 package ImageHoster.repository;
 
+import ImageHoster.model.Comment;
 import ImageHoster.model.Image;
 import org.springframework.stereotype.Repository;
 
@@ -50,10 +51,12 @@ public class ImageRepository {
     //Executes JPQL query to fetch the image from the database with corresponding title
     //Returns the image in case the image is found in the database
     //Returns null if no image is found in the database
-    public Image getImageByTitle(String title) {
+    public Image getImageByTitle(Integer id, String title) {
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i where i.title =:title", Image.class).setParameter("title", title);
+            TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i where i.id =:imageId and i.title =:title", Image.class);
+            typedQuery.setParameter("title", title);
+            typedQuery.setParameter("imageId", id);
             return typedQuery.getSingleResult();
         } catch (NoResultException nre) {
             return null;
@@ -110,4 +113,21 @@ public class ImageRepository {
         }
     }
 
+    public void save(Comment comment, Integer id) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
+            transaction.begin();
+            Image image = em.find(Image.class, id);
+            List<Comment> c= image.getComments();//new ArrayList<Comment>();
+            //c.size()
+            //c.add(c.size(), comments);
+            image.setComments(c);
+            em.merge(image);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+        }
+    }
 }

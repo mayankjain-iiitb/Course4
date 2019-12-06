@@ -40,8 +40,19 @@ public class UserController {
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user) {
-        userService.registerUser(user);
+    public String registerUser(User user,Model model) {
+		if(!this.checkString(user.getPassword()))
+		{
+			String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+            User user1 = new User();
+            UserProfile profile1 = new UserProfile();
+            user1.setProfile(profile1);
+            model.addAttribute("User", user1);
+            model.addAttribute("passwordTypeError", error);
+			return "users/registration";
+		}
+		
+		userService.registerUser(user);
         return "redirect:/users/login";
     }
 
@@ -79,4 +90,29 @@ public class UserController {
         model.addAttribute("images", images);
         return "index";
     }
+	
+	private static boolean checkString(String input) {
+    String specialChars = "~`!@#$%^&*()-_=+\\|[{]};:'\",<.>/?";
+    char currentCharacter;
+    boolean numberPresent = false;
+    boolean upperCasePresent = false;
+    boolean lowerCasePresent = false;
+    boolean specialCharacterPresent = false;
+ 
+    for (int i = 0; i < input.length(); i++) {
+        currentCharacter = input.charAt(i);
+        if (Character.isDigit(currentCharacter)) {
+            numberPresent = true;
+        } else if (Character.isUpperCase(currentCharacter)) {
+            upperCasePresent = true;
+        } else if (Character.isLowerCase(currentCharacter)) {
+            lowerCasePresent = true;
+        } else if (specialChars.contains(String.valueOf(currentCharacter))) {
+            specialCharacterPresent = true;
+        }
+    }
+ 
+    return
+      numberPresent && (upperCasePresent || lowerCasePresent) && specialCharacterPresent;
+	}
 }

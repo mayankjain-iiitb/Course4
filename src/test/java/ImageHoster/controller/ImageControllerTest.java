@@ -1,10 +1,6 @@
-/*
-package ImageHoster.controller;
+/*package ImageHoster.controller;
 
-import ImageHoster.model.Image;
-import ImageHoster.model.Tag;
-import ImageHoster.model.User;
-import ImageHoster.model.UserProfile;
+import ImageHoster.model.*;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.junit.Test;
@@ -86,7 +82,16 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
 
-        Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
+        Comment comment = new Comment();
+        comment.setId(1);
+        comment.setText("dummy test comment");
+        comment.setUser(user);
+
+        List<Comment> comments = new ArrayList<>();
+        comments.add(comment);
+        image.setComments(comments);
+
+        Mockito.when(imageService.getImageByTitle(Mockito.anyInt(), Mockito.anyString())).thenReturn(image);
 
         this.mockMvc.perform(get("/images/1/new").session(session))
                 .andExpect(view().name("images/image"))

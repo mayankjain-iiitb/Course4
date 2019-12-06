@@ -1,5 +1,4 @@
-/*
-package ImageHoster.controller;
+/*package ImageHoster.controller;
 
 import ImageHoster.service.ImageService;
 import org.junit.Test;
